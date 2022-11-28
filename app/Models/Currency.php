@@ -15,6 +15,7 @@ class Currency extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'name',
         'currency_code',
         'exchange_rate',
