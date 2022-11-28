@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -13,7 +14,15 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        $client = new \GuzzleHttp\Client();
+        $request = $client->get('https://api.nbp.pl/api/exchangerates/tables/A?format=json');
+        $response = json_decode($request->getBody(), true);
+        $table = $response[0];
+        // foreach ($table['rates'] as $item) {
+        //     Currency::updateOrInsert([]);
+        // }
+
+        return view('currency.index')->with('response', $table);
     }
 
     /**
