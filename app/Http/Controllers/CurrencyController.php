@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Currency;
+use App\Services\GetCurrencyApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,25 +14,9 @@ class CurrencyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(GetCurrencyApi $api)
     {
-        $client = new \GuzzleHttp\Client();
-        $request = $client->get('https://api.nbp.pl/api/exchangerates/tables/A?format=json');
-        $response = json_decode($request->getBody(), true);
-        $table = $response[0];
-        foreach ($table['rates'] as $item) {
-            $currency = Currency::where('currency_code', $item['code'])->first();
-            if ($currency !== null) {
-                $currency->update(['exchange_rate' => round($item['mid'], 2)]);
-            } else {
-                $currency = Currency::create([
-                    'uuid' => Str::uuid(),
-                    'name' => $item['currency'],
-                    'currency_code' => $item['code'],
-                    'exchange_rate' => round($item['mid'], 2),
-                ]);
-            }
-        }
+        $api->getData();
         $view = Currency::all();
         return view('currency.index')->with('response', $view);
     }
