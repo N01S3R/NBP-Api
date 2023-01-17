@@ -17,7 +17,7 @@ class CurrencyController extends Controller
     public function index(GetCurrencyApi $api)
     {
         $api->getData();
-        $view = Currency::all();
+        $view = Currency::paginate(8);
         return view('currency.index')->with('response', $view);
     }
 

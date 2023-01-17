@@ -14,9 +14,9 @@
             </thead>
             <tbody>
                 {{-- @dd($response) --}}
-                @foreach ($response as $key => $item)
+                @foreach ($response as $item)
                     <tr>
-                        <td>{{ ++$key }}</td>
+                        <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->currency_code }}</td>
                         <td>1 PLN = {{ $item->exchange_rate . ' ' . $item->currency_code }}</td>
@@ -24,5 +24,8 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="d-flex">
+            {!! $response->links() !!}
+        </div>
     </div>
 @endsection
